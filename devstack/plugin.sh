@@ -92,6 +92,10 @@ function octavia_configure {
     iniset $OCTAVIA_CONF controller_worker compute_driver ${OCTAVIA_COMPUTE_DRIVER}
     iniset $OCTAVIA_CONF controller_worker network_driver ${OCTAVIA_NETWORK_DRIVER}
 
+    iniset $OCTAVIA_CONF controller_worker loadbalancer_topology SINGLE
+    #iniset $OCTAVIA_CONF controller_worker loadbalancer_topology ACTIVE_STANDBY
+
+
     iniuncomment $OCTAVIA_CONF health_manager heartbeat_key
     iniset $OCTAVIA_CONF health_manager heartbeat_key ${OCTAVIA_HEALTH_KEY}
 
