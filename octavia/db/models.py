@@ -159,6 +159,7 @@ class Member(base_models.BASE, base_models.IdMixin, base_models.ProjectMixin,
     ip_address = sa.Column('ip_address', sa.String(64), nullable=False)
     protocol_port = sa.Column(sa.Integer, nullable=False)
     weight = sa.Column(sa.Integer, nullable=True)
+    backup = sa.Column(sa.Boolean(), nullable=False)
     operating_status = sa.Column(
         sa.String(16),
         sa.ForeignKey("operating_status.name",

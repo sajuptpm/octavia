@@ -136,6 +136,15 @@ class TestMember(base.BaseAPITest):
                 'protocol_port': 81}
         self.post(path, body, status=409, expect_errors=True)
 
+    def test_create_backup(self):
+        api_member = self.create_member(
+            self.pool_id, '10.0.0.1', 80, backup=True).get(self.root_tag)
+        self.assertTrue(api_member['backup'])
+        self.set_lb_status(self.lb_id)
+        api_member = self.create_member(
+            self.pool_id, '10.0.0.1', 81, backup=False).get(self.root_tag)
+        self.assertFalse(api_member['backup'])
+
     def test_bad_create(self):
         api_member = {'name': 'test1'}
         self.post(self.members_path, api_member, status=400)

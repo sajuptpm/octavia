@@ -25,6 +25,7 @@ class MemberResponse(base.BaseType):
     ip_address = wtypes.wsattr(base.IPAddressType())
     protocol_port = wtypes.wsattr(wtypes.IntegerType())
     weight = wtypes.wsattr(wtypes.IntegerType())
+    backup = wtypes.wsattr(bool)
     subnet_id = wtypes.wsattr(wtypes.UuidType())
     project_id = wtypes.wsattr(wtypes.StringType())
     created_at = wtypes.wsattr(wtypes.datetime.datetime)
@@ -38,6 +39,7 @@ class MemberPOST(base.BaseType):
     ip_address = wtypes.wsattr(base.IPAddressType(), mandatory=True)
     protocol_port = wtypes.wsattr(wtypes.IntegerType(), mandatory=True)
     weight = wtypes.wsattr(wtypes.IntegerType(), default=1)
+    backup = wtypes.wsattr(bool, default=False)
     subnet_id = wtypes.wsattr(wtypes.UuidType())
     project_id = wtypes.wsattr(wtypes.StringType(max_length=36))
 
@@ -47,3 +49,4 @@ class MemberPUT(base.BaseType):
     protocol_port = wtypes.wsattr(wtypes.IntegerType())
     enabled = wtypes.wsattr(bool)
     weight = wtypes.wsattr(wtypes.IntegerType())
+    backup = wtypes.wsattr(bool)

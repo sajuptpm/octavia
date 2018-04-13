@@ -270,7 +270,8 @@ class JinjaTemplater(object):
             'weight': member.weight,
             'enabled': member.enabled,
             'subnet_id': member.subnet_id,
-            'operating_status': member.operating_status
+            'operating_status': member.operating_status,
+            'backup': member.backup
         }
 
     def _transform_health_monitor(self, monitor):

@@ -48,6 +48,7 @@ class TestHaproxyCfg(base.TestCase):
               "    option httpchk GET /index.html\n"
               "    http-check expect rstatus 418\n"
               "    fullconn 98\n"
+              "    option allbackups\n"
               "    server sample_member_id_1 10.0.0.99:82 "
               "weight 13 check inter 30s fall 3 rise 2 "
               "cookie sample_member_id_1\n"
@@ -85,6 +86,7 @@ class TestHaproxyCfg(base.TestCase):
               "    option httpchk GET /index.html\n"
               "    http-check expect rstatus 418\n"
               "    fullconn 98\n"
+              "    option allbackups\n"
               "    server sample_member_id_1 10.0.0.99:82 "
               "weight 13 check inter 30s fall 3 rise 2 "
               "cookie sample_member_id_1\n"
@@ -113,6 +115,7 @@ class TestHaproxyCfg(base.TestCase):
               "    option httpchk GET /index.html\n"
               "    http-check expect rstatus 418\n"
               "    fullconn 98\n"
+              "    option allbackups\n"
               "    server sample_member_id_1 10.0.0.99:82 "
               "weight 13 check inter 30s fall 3 rise 2 "
               "cookie sample_member_id_1\n"
@@ -122,6 +125,32 @@ class TestHaproxyCfg(base.TestCase):
         rendered_obj = self.jinja_cfg.render_loadbalancer_obj(
             sample_configs.sample_amphora_tuple(),
             sample_configs.sample_listener_tuple())
+        self.assertEqual(
+            sample_configs.sample_base_expected_config(backend=be),
+            rendered_obj)
+
+    def test_render_template_member_backup(self):
+        be = ("backend sample_pool_id_1\n"
+              "    mode http\n"
+              "    balance roundrobin\n"
+              "    cookie SRV insert indirect nocache\n"
+              "    timeout check 31s\n"
+              "    option httpchk GET /index.html\n"
+              "    http-check expect rstatus 418\n"
+              "    fullconn 98\n"
+              "    option allbackups\n"
+              "    server sample_member_id_1 10.0.0.99:82 "
+              "weight 13 check inter 30s fall 3 rise 2 "
+              "addr 192.168.1.1 port 9000 "
+              "cookie sample_member_id_1\n"
+              "    server sample_member_id_2 10.0.0.98:82 "
+              "weight 13 check inter 30s fall 3 rise 2 "
+              "addr 192.168.1.1 port 9000 "
+              "cookie sample_member_id_2 backup\n\n")
+        rendered_obj = self.jinja_cfg.render_loadbalancer_obj(
+            sample_configs.sample_amphora_tuple(),
+            sample_configs.sample_listener_tuple(monitor_ip_port=True,
+                                                 backup_member=True))
         self.assertEqual(
             sample_configs.sample_base_expected_config(backend=be),
             rendered_obj)
@@ -160,6 +189,7 @@ class TestHaproxyCfg(base.TestCase):
               "    balance roundrobin\n"
               "    cookie SRV insert indirect nocache\n"
               "    fullconn 98\n"
+              "    option allbackups\n"
               "    server sample_member_id_1 10.0.0.99:82 weight 13 "
               "cookie sample_member_id_1\n"
               "    server sample_member_id_2 10.0.0.98:82 weight 13 "
@@ -182,6 +212,7 @@ class TestHaproxyCfg(base.TestCase):
               "    balance roundrobin\n"
               "    cookie SRV insert indirect nocache\n"
               "    fullconn 98\n"
+              "    option allbackups\n"
               "    server sample_member_id_1 10.0.0.99:82 weight 13 "
               "cookie sample_member_id_1\n"
               "    server sample_member_id_2 10.0.0.98:82 weight 13 "
@@ -203,6 +234,7 @@ class TestHaproxyCfg(base.TestCase):
               "    mode tcp\n"
               "    balance roundrobin\n"
               "    fullconn 98\n"
+              "    option allbackups\n"
               "    server sample_member_id_1 10.0.0.99:82 weight 13\n"
               "    server sample_member_id_2 10.0.0.98:82 weight 13\n\n")
         rendered_obj = self.jinja_cfg.render_loadbalancer_obj(
@@ -217,6 +249,7 @@ class TestHaproxyCfg(base.TestCase):
               "    mode http\n"
               "    balance roundrobin\n"
               "    fullconn 98\n"
+              "    option allbackups\n"
               "    server sample_member_id_1 10.0.0.99:82 weight 13\n"
               "    server sample_member_id_2 10.0.0.98:82 weight 13\n\n")
         rendered_obj = self.jinja_cfg.render_loadbalancer_obj(
@@ -236,6 +269,7 @@ class TestHaproxyCfg(base.TestCase):
               "    option httpchk GET /index.html\n"
               "    http-check expect rstatus 418\n"
               "    fullconn 98\n"
+              "    option allbackups\n"
               "    server sample_member_id_1 10.0.0.99:82 "
               "weight 13 check inter 30s fall 3 rise 2\n"
               "    server sample_member_id_2 10.0.0.98:82 "
@@ -259,6 +293,7 @@ class TestHaproxyCfg(base.TestCase):
               "    option httpchk GET /index.html\n"
               "    http-check expect rstatus 418\n"
               "    fullconn 98\n"
+              "    option allbackups\n"
               "    server sample_member_id_1 10.0.0.99:82 "
               "weight 13 check inter 30s fall 3 rise 2\n"
               "    server sample_member_id_2 10.0.0.98:82 "
@@ -300,6 +335,7 @@ class TestHaproxyCfg(base.TestCase):
               "    option httpchk GET /index.html\n"
               "    http-check expect rstatus 418\n"
               "    fullconn 98\n"
+              "    option allbackups\n"
               "    server sample_member_id_1 10.0.0.99:82 weight 13 check "
               "inter 30s fall 3 rise 2 cookie sample_member_id_1\n"
               "    server sample_member_id_2 10.0.0.98:82 weight 13 check "
@@ -313,6 +349,7 @@ class TestHaproxyCfg(base.TestCase):
               "    option httpchk GET /healthmon.html\n"
               "    http-check expect rstatus 418\n"
               "    fullconn 98\n"
+              "    option allbackups\n"
               "    server sample_member_id_3 10.0.0.97:82 weight 13 check "
               "inter 30s fall 3 rise 2 cookie sample_member_id_3\n\n")
         rendered_obj = self.jinja_cfg.render_loadbalancer_obj(
@@ -331,6 +368,7 @@ class TestHaproxyCfg(base.TestCase):
               "    http-check expect rstatus 418\n"
               "    option forwardfor\n"
               "    fullconn 98\n"
+              "    option allbackups\n"
               "    server sample_member_id_1 10.0.0.99:82 "
               "weight 13 check inter 30s fall 3 rise 2 "
               "cookie sample_member_id_1\n"
@@ -356,6 +394,7 @@ class TestHaproxyCfg(base.TestCase):
               "    option forwardfor\n"
               "    http-request set-header X-Forwarded-Port %[dst_port]\n"
               "    fullconn 98\n"
+              "    option allbackups\n"
               "    server sample_member_id_1 10.0.0.99:82 "
               "weight 13 check inter 30s fall 3 rise 2 "
               "cookie sample_member_id_1\n"
